@@ -27,13 +27,13 @@ object Huffman {
   // Part 1: Basics
 
   def weight(tree: CodeTree): Int = tree match {
-    case Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight1: Int) => weight(left) + weight(right)
-    case Leaf(char: Char, weight: Int) => weight
+    case Fork(left: CodeTree, right: CodeTree, _, _) => weight(left) + weight(right)
+    case Leaf(_, weight: Int) => weight
   }
 
   def chars(tree: CodeTree): List[Char] = tree match {
-    case Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight1: Int) => chars
-    case Leaf(char: Char, weight: Int) => List(char)
+    case Fork(_, _, chars: List[Char], _) => chars
+    case Leaf(char: Char, _) => List(char)
   }
 
   def makeCodeTree(left: CodeTree, right: CodeTree) =
@@ -169,12 +169,12 @@ object Huffman {
     }
 
     def decodeChar(tree: CodeTree, bits: List[Bit], depth: Int): (Char, Int) = tree match {
-      case Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight1: Int) =>
+      case Fork(left: CodeTree, right: CodeTree, _, _) =>
 
         val nextLeaf = if (bits.head == 0) left else right
         decodeChar(nextLeaf, bits.tail, depth + 1)
 
-      case Leaf(char: Char, weight: Int) => (char, depth)
+      case Leaf(char: Char, _) => (char, depth)
     }
 
     fore(List(), bits)
@@ -232,7 +232,7 @@ object Huffman {
 
   def main (args: Array[String] ) {
     val decodedSecret: List[Char] = decode(frenchCode,secret)
-    print(decodedSecret)
+    decodedSecret.foreach(print)
   }
 }
 
