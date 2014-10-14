@@ -104,11 +104,10 @@ object Huffman {
     if (trees.length < 2)
       trees
     else {
-      val sorted: List[CodeTree] = trees.sortBy(weight)
-      val e1 = sorted(0)
-      val e2 = sorted(1)
+      val e1 = trees(0)
+      val e2 = trees(1)
       val fork: Fork = Fork(e1, e2, chars(e1) ::: chars(e2), weight(e1) + weight(e2))
-      fork :: (sorted drop 2)
+      fork :: (trees drop 2)
     }
   }
 
