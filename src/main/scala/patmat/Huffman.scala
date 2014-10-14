@@ -27,13 +27,13 @@ object Huffman {
   // Part 1: Basics
 
   def weight(tree: CodeTree): Int = tree match {
-    case Fork(left: CodeTree, right: CodeTree, _, _) => weight(left) + weight(right)
-    case Leaf(_, weight: Int) => weight
+    case x: Fork => weight(x.left) + weight(x.right)
+    case x: Leaf => x.weight
   }
 
   def chars(tree: CodeTree): List[Char] = tree match {
-    case Fork(_, _, chars: List[Char], _) => chars
-    case Leaf(char: Char, _) => List(char)
+    case x: Fork => x.chars
+    case x: Leaf => List(x.char)
   }
 
   def makeCodeTree(left: CodeTree, right: CodeTree) =
@@ -169,12 +169,10 @@ object Huffman {
     }
 
     def decodeChar(tree: CodeTree, bits: List[Bit], depth: Int): (Char, Int) = tree match {
-      case Fork(left: CodeTree, right: CodeTree, _, _) =>
-
-        val nextLeaf = if (bits.head == 0) left else right
+      case x: Fork =>
+        val nextLeaf = if (bits.head == 0) x.left else x.right
         decodeChar(nextLeaf, bits.tail, depth + 1)
-
-      case Leaf(char: Char, _) => (char, depth)
+      case x: Leaf => (x.char, depth)
     }
 
     fore(List(), bits)
@@ -192,7 +190,19 @@ object Huffman {
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  //  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+  //
+  //
+  //    def encodeChar(in: Char, tree: CodeTree, acc: List[Bit]): List[Bit] = tree match {
+  //      case Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight1: Int) =>
+  //
+  //        val nextLeaf = if (bits.head == 0) left else right
+  //
+  //        encodeChar(in, nextLeaf, acc ++ List())
+  //
+  //      case Leaf(char: Char, weight: Int) => acc
+  //    }
+  //  }
 
 
   // Part 4b: Encoding using code table
