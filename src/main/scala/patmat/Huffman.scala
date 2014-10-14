@@ -24,8 +24,6 @@ object Huffman {
   case class Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight: Int) extends CodeTree
   case class Leaf(char: Char, weight: Int) extends CodeTree
 
-
-
   // Part 1: Basics
 
   def weight(tree: CodeTree): Int = tree match {
@@ -70,11 +68,10 @@ object Huffman {
 
     for(c <- chars){
       val times = res.getOrElse(c,0)
-      if(times == 0)  res += c -> 1
-      else {
-        res = res - c
-        res += c -> (times + 1)
-      }
+      if(times == 0)
+        res += c -> 1
+      else
+        res = res updated (c,times+1)
     }
     res.toList
   }
@@ -92,7 +89,7 @@ object Huffman {
   /**
    * Checks whether the list `trees` contains only one single code tree.
       */
-  def singleton(trees: List[CodeTree]): Boolean =  trees.length == 1
+  def singleton(trees: List[CodeTree]): Boolean = trees.length == 1
 
   /**
    * The parameter `trees` of this function is a list of code trees ordered
@@ -102,12 +99,17 @@ object Huffman {
    * them into a single `Fork` node. This node is then added back into the
    * remaining elements of `trees` at a position such that the ordering by weights
    * is preserved.
-   *
-   * If `trees` is a list of less than two elements, that list should be returned
-   * unchanged.
    */
   def combine(trees: List[CodeTree]): List[CodeTree] = {
-    trees.reduceLeft()
+    if (trees.length < 2)
+      trees
+    else {
+      val sorted: List[CodeTree] = trees.sortBy(weight)
+      val e1 = sorted(0)
+      val e2 = sorted(1)
+      val fork: Fork = Fork(e1, e2, chars(e1) ::: chars(e2), weight(e1) + weight(e2))
+      fork :: (sorted drop 2)
+    }
   }
 
   /**
