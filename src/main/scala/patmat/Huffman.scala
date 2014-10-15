@@ -190,19 +190,20 @@ object Huffman {
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  //  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
-  //
-  //
-  //    def encodeChar(in: Char, tree: CodeTree, acc: List[Bit]): List[Bit] = tree match {
-  //      case Fork(left: CodeTree, right: CodeTree, chars: List[Char], weight1: Int) =>
-  //
-  //        val nextLeaf = if (bits.head == 0) left else right
-  //
-  //        encodeChar(in, nextLeaf, acc ++ List())
-  //
-  //      case Leaf(char: Char, weight: Int) => acc
-  //    }
-  //  }
+  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    def encodeChar(in: Char, tree: CodeTree, acc: List[Bit]): List[Bit] = tree match {
+      case x: Fork =>
+        encodeChar(in, x.left, acc ++ List(0)) ++ encodeChar(in, x.right, acc ++ List(1))
+      case x: Leaf => if (x.char == in) acc else List()
+    }
+
+    def fore(acc: List[Bit], in: List[Char]): List[Bit] = {
+      if (in.isEmpty) acc
+      else fore(acc ++ encodeChar(in.head, tree, List()), in.tail)
+    }
+
+    fore(List(), text)
+  }
 
 
   // Part 4b: Encoding using code table
@@ -240,9 +241,5 @@ object Huffman {
    */
   def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
 
-  def main (args: Array[String] ) {
-    val decodedSecret: List[Char] = decode(frenchCode,secret)
-    decodedSecret.foreach(print)
-  }
 }
 
