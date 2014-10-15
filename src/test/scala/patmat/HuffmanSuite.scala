@@ -88,4 +88,9 @@ class HuffmanSuite extends FunSuite {
       assert(decode(t1, encode(t1)("ab".toList)) === "ab".toList)
     }
   }
+
+  test("construct french tree"){
+    val createCodeTre1e: CodeTree = createCodeTree(decodedSecret)
+
+  }
 }

@@ -107,7 +107,11 @@ object Huffman {
       val e1 = trees(0)
       val e2 = trees(1)
       val fork: Fork = Fork(e1, e2, chars(e1) ::: chars(e2), weight(e1) + weight(e2))
-      fork :: (trees drop 2)
+
+      val shorterTrees: List[CodeTree] = trees drop 2
+      val weight1: Int = if (shorterTrees.nonEmpty) weight(shorterTrees(0)) else 0
+      if (fork.weight > weight1) shorterTrees ++ List(fork)
+      else fork :: shorterTrees
     }
   }
 
