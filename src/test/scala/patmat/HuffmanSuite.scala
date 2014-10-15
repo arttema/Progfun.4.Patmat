@@ -56,9 +56,14 @@ class HuffmanSuite extends FunSuite {
 
   test("Secret decode") {
     val decodedSecret: List[Char] = decode(frenchCode, secret)
-
     assert("huffmanestcool" == (decodedSecret mkString) )
   }
+
+
+  test("Convert code tree to code table") {
+    println(convert(frenchCode))
+  }
+
 
   test("Encode using tree") {
     val decodedSecret: List[Char] = decode(frenchCode, secret)
