@@ -64,13 +64,14 @@ class HuffmanSuite extends FunSuite {
     println(convert(frenchCode))
   }
 
-
   test("Encode using tree") {
-    val decodedSecret: List[Char] = decode(frenchCode, secret)
-    decodedSecret.foreach(print)
+    val encoded: List[Bit] = encode(frenchCode)(decodedSecret)
+    assert(encoded == secret)
+  }
 
-    val encode1: List[Bit] = encode(frenchCode)(decodedSecret)
-    assert(encode1 == secret)
+  test("Encode using table") {
+    val encoded: List[Bit] = quickEncode(frenchCode)(decodedSecret)
+    assert(encoded == secret)
   }
 
   test("makeOrderedLeafList for some frequency table") {
